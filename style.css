@@ -1,0 +1,135 @@
+* {
+    margin: 0%;
+    padding: 0%;
+}
+
+a {
+    font-family: sans-serif;
+    text-decoration: none; 
+    /* vai servir para tirar a linha que fica de baixo de um link mas vai precisar do comando none para aparecer */
+}
+
+.header {
+    background: 	#708090;
+    padding-inline: 16px;
+}
+
+.nav {
+    max-width: 1280px;
+    height: 70px;
+    margin-inline: auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    font-size: 20px;
+    text-align: center;
+}
+
+.nav-list {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+}
+
+.nav-list a {
+    font-size: 18px;
+    color: black;
+    padding-block: 16px;
+}
+
+.hero {
+    height: calc(100vh - 70px);
+    background: center / cover no-repeat url("");
+}
+ /* o nome hamburger vai se referir sempre para o modelo de 3 linhas que fica visivel para o ussiario de moblile */
+.hamburger {
+    display: none;
+    border: none;
+    background: none;
+    border-top: 3px solid black;
+    cursor: pointer;
+}
+
+.hamburger::before,
+.hamburger::after {
+    content: " ";
+    display: block;
+    width: 30px;
+    height: 3px;
+    background: black;
+    margin-top: 5px;
+}
+ /* vai servir para criar uma especie de leialt para que o ussuario possa "ver" */
+@media (max-width: 750px) {
+    .hamburger {
+        display: block;
+        z-index: 1;
+    }
+
+    
+    .nav-list {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background:	#708090;
+        clip-path: circle(100px at 90% -15%);
+        transition: 1s ease-out;
+
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        gap: 0;
+        pointer-events: none;
+
+    }
+    /* Estilos ativos */
+
+    .nav.active .nav-list {
+        clip-path: circle(1500px at 90% -15%);
+        pointer-events: all;
+    }
+}
+
+.nome-logo {
+    text-align: center;
+    padding:50px ;
+}
+
+.triceps {
+    text-align: center;
+}
+
+.peito {
+    text-align: center;
+}
+
+.ombro {
+    text-align: center;
+}
+
+.biceps {
+    text-align: center;
+}
+
+.costa {
+    text-align: center;
+}
+
+.antebraco {
+    text-align: center;
+}
+
+.perna {
+    text-align: center;
+}
+
+.logo1 {
+    width: 100px;
+    height: 100px;
+}
