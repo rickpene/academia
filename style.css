@@ -16,7 +16,7 @@ a {
 
 .nav {
     max-width: 1280px;
-    height: 70px;
+    height: 100px;
     margin-inline: auto;
     text-align: center;
     display: flex;
@@ -130,8 +130,8 @@ a {
 }
 
 .logo1 {
-    width: 100px;
-    height: 100px;
+    width: 500px;
+    height: 500px;
 }
 
 .margem {
@@ -140,4 +140,9 @@ a {
 
 .fundo {
     background: #fff;
+}
+
+.nome-logo {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: red;
 }
