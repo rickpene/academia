@@ -133,3 +133,11 @@ a {
     width: 100px;
     height: 100px;
 }
+
+.margem {
+    height: 100px;
+}
+
+.fundo {
+    background: black;
+}
