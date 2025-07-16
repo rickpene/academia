@@ -11,12 +11,12 @@
     }
 
     body {
-        height: 300vh;
+        height: 300vh; /* Aumenta o conteúdo para testar o scroll */
         background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
         font-family: sans-serif;
         cursor: none;
         color: white; /* Garante que o texto seja visível no fundo escuro */
-        /* Removido: overflow-x: hidden; - Isso estava causando problemas */
+        /* Removido: overflow-x: hidden; - Isso estava causando problemas, e o media query já resolve o cursor */
     }
 
     /* Estrelas no fundo */
@@ -128,6 +128,8 @@
 
     .img-logo {
         text-align: center;
+        animation: fadeSlideIn 1.5s ease forwards; /* Aplica a animação aqui */
+        opacity: 0; /* Inicia invisível para a animação */
         padding-top: 100px; /* Ajuste para evitar sobreposição com a navbar */
     }
 
@@ -165,7 +167,7 @@
     .treino-box a {
         text-decoration: none;
         color: inherit;
-        display: inline-block;
+        display: block; /* Garante que o link preencha a caixa inteira */
     }
 
     /* Planilha com pulsação */
@@ -175,6 +177,7 @@
         justify-content: center;
         align-items: center;
         padding: 20px;
+        margin-top: 50px; /* Adiciona um espaço para separar */
     }
 
     .planilha img {
@@ -195,6 +198,7 @@
     .frutas {
         text-align: center;
         animation: slowPulse 4s ease-in-out infinite;
+        margin-top: 50px; /* Adiciona um espaço para separar */
     }
 
     .frutas img {
@@ -214,7 +218,7 @@
     /* Centraliza a imagem "alimentação" e adiciona animação de hover */
     .alimentacao {
         text-align: center;
-        margin: 0 auto;
+        margin: 50px auto; /* Adiciona margens superior/inferior para separar */
         transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
@@ -229,6 +233,38 @@
         transform: scale(1.05);
         box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
     }
+
+    /* Botão de Fechar/Voltar dentro do menu */
+    .close-menu-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        z-index: 1000; /* Garante que esteja acima dos links */
+        display: none; /* Oculto por padrão, visível apenas no menu mobile ativo */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close-menu-btn .bar {
+        width: 100%;
+        height: 3px;
+        background-color: white;
+        position: absolute; /* Para sobrepor */
+        transition: all 0.3s ease-in-out;
+    }
+
+    .close-menu-btn .bar:nth-child(1) {
+        transform: rotate(45deg);
+    }
+
+    .close-menu-btn .bar:nth-child(2) {
+        transform: rotate(-45deg);
+    }
+
 
     /* ------------------- Media Queries para Responsividade Móvel ------------------- */
 
@@ -296,6 +332,11 @@
             border-bottom: none; /* Remove a borda do último item */
         }
 
+        /* Exibe o botão de fechar no menu ativo */
+        .nav-links.active .close-menu-btn {
+            display: flex;
+        }
+
         .img-logo {
             padding-top: 80px; /* Ajuste para telas menores */
         }
@@ -316,10 +357,14 @@
             box-shadow: 0 8px 20px rgba(0, 119, 255, 0.5);
         }
 
-        .planilha img,
-        .frutas img,
-        .alimentacao img {
+        .planilha img {
             max-width: 95%; /* Garante que as imagens não transbordem */
+        }
+        .frutas img {
+            max-width: 70%; /* Aumenta um pouco em telas menores */
+        }
+        .alimentacao img {
+            max-width: 90%; /* Aumenta para ocupar mais espaço em tablets */
         }
     }
 
@@ -332,6 +377,11 @@
         .nav-links a {
             font-size: 20px; /* Ajusta o tamanho da fonte para telas muito pequenas */
             margin: 10px 0;
+        }
+
+        .close-menu-btn {
+            top: 15px; /* Ajusta posição para telas muito pequenas */
+            right: 15px;
         }
 
         .img-logo {
@@ -347,6 +397,16 @@
             font-size: 16px;
             padding: 10px;
         }
+
+        .planilha img {
+            max-width: 98%;
+        }
+        .frutas img {
+            max-width: 80%; /* Aumenta mais ainda em telas pequenas */
+        }
+        .alimentacao img {
+            max-width: 95%; /* Ocupa quase toda a largura em celulares pequenos */
+        }
     }
 </style>
 </head>
@@ -359,14 +419,18 @@
 </div>
 
 <div class="navbar" id="navbar">
-    <div> 🥔 ACADEMIA BÃO DE BATATA 🥔 </div>
+    <div> 🥔 ACADEMIA PÃO DE BATATA 🥔 </div>
     <div class="hamburger-menu" id="hamburgerMenu">
         <div class="bar"></div>
         <div class="bar"></div>
         <div class="bar"></div>
     </div>
     <div class="nav-links" id="navLinks">
-        <a href="tela-inicio.html">Início</a>
+        <div class="close-menu-btn" id="closeMenuBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <a href="index.html">Início</a>
         <a href="comentarios.html">Comentários</a>
         <a href="https://www.instagram.com/alegria_rp">Contato</a>
     </div>
@@ -382,33 +446,13 @@
     <div class="treino-box"><a href="link-da-perna.html">Treino de Perna</a></div><br>
 </div>
 
-<br>
-<br><br><br><br><br><br><br><br>
-
 <div class="planilha">
     <img src="logo/palnilha.png" alt="Planilha de Treino">
 </div>
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 <div class="frutas">
     <img src="logo/Captura_de_tela_2025-07-16_005511-removebg-preview.png" alt="Frutas">
 </div>
-
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
 
 <div class="alimentacao">
     <img src="logo/alimentação.jpg" alt="Alimentação">
@@ -424,10 +468,10 @@
         cursor.style.top = `${e.clientY}px`;
     });
 
-    // Animação da navbar ao rolar (mantida)
+    // Animação da navbar ao rolar (esconde/mostra)
     let lastScrollTop = 0;
     const navbar = document.getElementById("navbar");
-    const navLinks = document.getElementById('navLinks'); // Mova esta declaração para fora da função
+    const navLinks = document.getElementById('navLinks');
 
     window.addEventListener("scroll", () => {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
@@ -444,11 +488,11 @@
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
     });
 
-    // Funcionalidade do Menu Hambúrguer
+    // Funcionalidade do Menu Hambúrguer (abre/fecha)
     const hamburgerMenu = document.getElementById('hamburgerMenu');
-    // const navLinks = document.getElementById('navLinks'); // Já declarado acima
+    const closeMenuBtn = document.getElementById('closeMenuBtn'); // Pega o botão de fechar
 
-    hamburgerMenu.addEventListener('click', () => {
+    function toggleMenu() {
         hamburgerMenu.classList.toggle('open');
         navLinks.classList.toggle('active');
         // Controla o scroll do corpo
@@ -457,15 +501,14 @@
         } else {
             document.body.style.overflow = ''; // Restaura o scroll
         }
-    });
+    }
 
-    // Fecha o menu ao clicar em um link (opcional, mas boa prática)
+    hamburgerMenu.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu); // Adiciona listener para o botão de fechar
+
+    // Fecha o menu ao clicar em um link
     navLinks.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', () => {
-            hamburgerMenu.classList.remove('open');
-            navLinks.classList.remove('active');
-            document.body.style.overflow = ''; // Restaura o scroll
-        });
+        link.addEventListener('click', toggleMenu); // Usa a função toggleMenu para fechar
     });
 </script>
 
