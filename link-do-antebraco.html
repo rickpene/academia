@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css">
+<title>Espaço com Navbar Animada</title>
+<style>
+    * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    }
+
+    body {
+      height: 300vh; /* aumenta o conteúdo para testar o scroll */
+    background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
+    font-family: sans-serif;
+    cursor: none;
+    color: white; /* Added to make text visible on dark background */
+    }
+
+    /* Estrelas no fundo */
+    .stars {
+    width: 100%;
+    height: 100%;
+    background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-space/master/stars.png') repeat;
+    animation: moveStars 100s linear infinite;
+    position: fixed;
+    z-index: -2;
+    }
+
+    @keyframes moveStars {
+    from { background-position: 0 0; }
+    to { background-position: -10000px 10000px; }
+    }
+
+    /* Cursor customizado */
+    .cursor {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6);
+    pointer-events: none;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease;
+    z-index: 1000;
+    }
+
+    /* Navbar fixa com animações */
+    .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 15px 30px;
+    background: rgba(0, 0, 30, 0.8);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+    transition: top 0.5s ease;
+    z-index: 100;
+    }
+
+    .navbar.hide {
+    top: -80px;
+    }
+
+    .nav-links a {
+    color: white;
+    margin-left: 20px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+    color: #aaa;
+    }
+
+    /* Animação de entrada da imagem */
+    @keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    }
+
+    .img-logo {
+    text-align: center;
+    animation: fadeSlideIn 1.5s ease forwards;
+      opacity: 0; /* inicia invisível até completar animação */
+    padding-top: 100px; /* Adjust as needed to prevent overlap with navbar */
+    }
+
+    /* Style for individual exercise blocks */
+    .exercise-block {
+        text-align: center;
+        margin-top: 50px;
+        padding: 20px;
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        margin: 50px auto;
+        max-width: 600px;
+    }
+
+    .exercise-block p {
+        font-size: 24px;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    .exercise-block img {
+        display: block;
+        margin: 0 auto 20px auto; /* Centers image and adds space below */
+        border: 2px solid #aaa;
+        border-radius: 5px;
+    }
+
+    .note-block {
+        text-align: center;
+        margin: 20px auto 50px auto;
+        padding: 15px;
+        background-color: rgba(30, 0, 0, 0.7); /* Slightly different background for emphasis */
+        border-radius: 8px;
+        max-width: 600px;
+        font-size: 1.1em;
+        color: #ffcccc; /* Lighter color for note text */
+    }
+
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="img-logo">
+    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" height="500px" width="500px">
+</div>
+
+<div class="navbar" id="navbar">
+    <div> 🥔 ACADEMIA BÃO DE BATATA 🥔 </div>
+    <div class="nav-links">
+    <a href="tela-inicio.html">Início</a>
+    <a href="comentarios.html">Comentários</a>
+    <a href="https://www.instagram.com/alegria_rp">Contato</a>
+    </div>
+</div>
+
+<div class="cursor" id="cursor"></div>
+
+<div class="exercise-block">
+    <p>TREINO DE ANTEBRAÇO</p>
+    <img src="treino/rosca-inversa-barra-w.gif" alt="Rosca Inversa na Barra W" height="200px" width="200px">
+</div>
+
+<div class="exercise-block">
+    <p>TREINO DE ANTEBRAÇO</p>
+    <img src="treino/extensao-de-punho-com-barra.gif" alt="Extensão de Punho com Barra" height="200px" width="200px">
+</div>
+
+<div class="exercise-block">
+    <p>TREINO DE ANTEBRAÇO</p>
+    <img src="treino/rusca-punho-com-barra.gif" alt="Rosca de Punho com Barra" height="200px" width="200px">
+</div>
+
+<div class="exercise-block">
+    <p>TREINO DE ANTEBRAÇO</p>
+    <img src="treino/roscaww.gif" alt="Rosca Inversa com Barra" height="200px" width="200px">
+</div>
+
+<div class="note-block">
+    <p>PS: Não fazer o último exercício com o movimento pelas costas, mas sim pela frente do corpo.</p>
+</div>
+    
+<script>
+    // Cursor animado
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+    cursor.style.left = `${e.clientX}px`;
+    cursor.style.top = `${e.clientY}px`;
+    });
+
+    // Animação da navbar ao rolar
+    let lastScrollTop = 0;
+    const navbar = document.getElementById("navbar");
+
+    window.addEventListener("scroll", () => {
+    let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+    if (currentScroll > lastScrollTop) {
+        // Rolando para baixo -> esconde
+        navbar.classList.add("hide");
+    } else {
+        // Rolando para cima -> mostra
+        navbar.classList.remove("hide");
+    }
+    lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+</script>
+
+</body>
+</html>

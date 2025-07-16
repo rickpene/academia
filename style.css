@@ -146,3 +146,82 @@ a {
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     color: red;
 }
+
+/* Navbar fixa com animações */
+.navbar {
+position: fixed;
+top: 0;
+left: 0;
+width: 100%;
+padding: 15px 30px;
+background: rgba(0, 0, 30, 0.8);
+color: white;
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 20px;
+transition: top 0.5s ease;
+z-index: 100;
+}
+
+.navbar.hide {
+  top: -80px; /* Oculta com animação */
+}
+
+.nav-links a {
+color: white;
+margin-left: 20px;
+text-decoration: none;
+transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+color: #aaa;
+}
+
+.img-logo{
+    text-align: center;
+}
+
+.treino-box {
+text-align: center; /* Isso centraliza o texto e o conteúdo inline dentro da caixa */
+width: 500px;
+padding: 20px 20px;
+background-color: #ffffff;
+border-radius: 20px;
+border: 2px solid #b0bdcc;
+box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+font-size: 24px;
+font-family: Arial, sans-serif;
+color: #000000;
+transition: all 0.3s ease;
+cursor: pointer;
+/* Adicione as linhas abaixo para centralizar a caixa horizontalmente na página */
+display: block; /* Garante que o elemento se comporta como um bloco */
+margin: 0 auto; /* Centraliza a caixa definindo margens laterais automáticas */
+}
+
+.treino-box:hover {
+background-color: rgba(0, 0, 30, 0.8);
+color: white;
+transform: scale(1.05);
+box-shadow: 0 8px 20px rgba(0, 119, 255, 0.3);
+}
+
+.tudo {
+text-align: center;
+}
+
+.n1 {
+text-align: center;
+}
+
+.fundo-mag {
+background-color: #f0f4f8; /* Um azul bem claro */
+margin: 0;
+padding: 40px 0;
+}
+
+.frutas {
+    text-align: center;
+}
