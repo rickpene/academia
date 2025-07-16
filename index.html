@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Espaço com Navbar Animada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Espaço com Navbar Animada</title>
 <style>
     * {
         margin: 0;
@@ -15,7 +15,8 @@
         background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
         font-family: sans-serif;
         cursor: none;
-        color: white; /* Added to ensure text is visible on dark background */
+        color: white; /* Garante que o texto seja visível no fundo escuro */
+        /* Removido: overflow-x: hidden; - Isso estava causando problemas */
     }
 
     /* Estrelas no fundo */
@@ -33,7 +34,7 @@
         to { background-position: -10000px 10000px; }
     }
 
-    /* Cursor customizado */
+    /* Cursor customizado - Oculto em dispositivos de toque por media query */
     .cursor {
         position: fixed;
         width: 20px;
@@ -68,10 +69,44 @@
         top: -80px;
     }
 
+    /* Menu Hambúrguer (Oculto por padrão no desktop) */
+    .hamburger-menu {
+        display: none; /* Oculta o ícone do hambúrguer no desktop */
+        flex-direction: column;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .hamburger-menu .bar {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 4px 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Animação do ícone do hambúrguer para X */
+    .hamburger-menu.open .bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger-menu.open .bar:nth-child(2) {
+        opacity: 0;
+    }
+
+    .hamburger-menu.open .bar:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Links de navegação (desktop) */
+    .nav-links {
+        display: flex; /* Exibe os links lado a lado por padrão no desktop */
+        gap: 20px; /* Espaçamento entre os links */
+    }
+
     .nav-links a {
-        text-decoration: none; /* Tira o sublinhado */
+        text-decoration: none;
         color: white;
-        margin-left: 20px;
         transition: color 0.3s ease;
     }
 
@@ -93,17 +128,19 @@
 
     .img-logo {
         text-align: center;
-        /* Applied initial animation here if needed, but not in original prompt's style for img-logo */
-        /* If you want the logo to animate, uncomment and adjust: */
-        /* animation: fadeSlideIn 1.5s ease forwards; */
-        /* opacity: 0; */
-        padding-top: 100px; /* Adjust as needed to prevent overlap with navbar */
+        padding-top: 100px; /* Ajuste para evitar sobreposição com a navbar */
+    }
+
+    .img-logo img {
+        max-width: 100%; /* Torna o logo responsivo */
+        height: auto; /* Mantém a proporção */
+        width: 500px; /* Largura padrão para telas maiores */
     }
 
     .treino-box {
         text-align: center;
         width: 500px;
-        padding: 20px 20px;
+        padding: 20px;
         background-color: #ffffff;
         border-radius: 20px;
         border: 2px solid #b0bdcc;
@@ -111,25 +148,20 @@
         font-size: 24px;
         font-family: Arial, sans-serif;
         color: #000000;
-        /* Transições para o efeito suave */
         transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, z-index 0s;
         cursor: pointer;
         display: block;
-        margin: 15px auto; /* Adiciona um pouco de margem para melhor visualização */
-        position: relative; /* Essencial para o z-index funcionar */
-        z-index: 1; /* z-index padrão para as caixas não-interagidas */
+        margin: 15px auto;
+        position: relative;
+        z-index: 1;
     }
 
     .treino-box:hover {
-        /* Aumenta a escala e move para cima */
         transform: scale(1.08) translateY(-15px);
-        /* Sombra mais pronunciada e colorida */
         box-shadow: 0 12px 25px rgba(0, 119, 255, 0.5);
-        /* Coloca o elemento BEM na frente de outros */
         z-index: 2000;
     }
 
-    /* Remove sublinhado dos links dentro da treino-box */
     .treino-box a {
         text-decoration: none;
         color: inherit;
@@ -145,6 +177,11 @@
         padding: 20px;
     }
 
+    .planilha img {
+        max-width: 90%; /* Torna a planilha responsiva */
+        height: auto;
+    }
+
     @keyframes pulsar {
         0%, 100% {
             transform: scale(1);
@@ -154,10 +191,15 @@
         }
     }
 
-    /* New slow pulsing animation for 'frutas' */
+    /* Animação de pulsação lenta para 'frutas' */
     .frutas {
         text-align: center;
-        animation: slowPulse 4s ease-in-out infinite; /* Slower animation: 4 seconds */
+        animation: slowPulse 4s ease-in-out infinite;
+    }
+
+    .frutas img {
+        max-width: 60%; /* Torna frutas responsiva */
+        height: auto;
     }
 
     @keyframes slowPulse {
@@ -165,27 +207,146 @@
             transform: scale(1);
         }
         50% {
-            transform: scale(1.03); /* A smaller scale change for a more subtle pulse */
+            transform: scale(1.03);
         }
     }
 
-    /* Centralize the "alimentação" image and add hover animation */
+    /* Centraliza a imagem "alimentação" e adiciona animação de hover */
     .alimentacao {
-        text-align: center; /* Centers the image horizontally */
-        margin: 0 auto; /* Ensures the div itself is centered */
+        text-align: center;
+        margin: 0 auto;
         transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     }
 
     .alimentacao img {
-        display: block; /* Removes extra space below the image */
-        margin: 0 auto; /* Centers the image within its container */
-        max-width: 100%; /* Ensures the image is responsive */
-        height: auto; /* Maintains aspect ratio */
+        display: block;
+        margin: 0 auto;
+        max-width: 80%; /* Torna alimentação responsiva */
+        height: auto;
     }
 
     .alimentacao:hover {
-        transform: scale(1.05); /* Slightly enlarges the image on hover */
-        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); /* Adds a glow effect */
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    /* ------------------- Media Queries para Responsividade Móvel ------------------- */
+
+    @media (max-width: 768px) { /* Para tablets e dispositivos menores */
+        body {
+            font-size: 16px;
+        }
+
+        /* Oculta o cursor personalizado em telas menores */
+        .cursor {
+            display: none;
+        }
+
+        .navbar {
+            padding: 10px 15px;
+            font-size: 16px;
+            flex-wrap: wrap; /* Permite que os itens quebrem a linha se necessário */
+        }
+
+        .navbar.hide {
+            top: -80px; /* Ajusta o valor de ocultar para a altura fixa da navbar */
+        }
+
+        /* Exibe o ícone do hambúrguer */
+        .hamburger-menu {
+            display: flex; /* Exibe o ícone do hambúrguer */
+            order: 2; /* Coloca o hambúrguer à direita do título */
+        }
+
+        /* Nav-links para preencher a tela toda */
+        .nav-links {
+            display: flex; /* Mantém flex para centralização vertical */
+            flex-direction: column;
+            justify-content: center; /* Centraliza os itens verticalmente */
+            align-items: center; /* Centraliza os itens horizontalmente */
+            width: 100%;
+            height: 100%; /* Ajustado para 100% */
+            position: fixed; /* Fixo na tela */
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 30, 0.98); /* Fundo quase opaco para o menu aberto */
+            z-index: 999; /* Garante que o menu esteja no topo */
+            opacity: 0;
+            transform: translateX(100%); /* Começa fora da tela, à direita */
+            pointer-events: none; /* Impede cliques quando oculto */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Transição mais longa */
+        }
+
+        .nav-links.active {
+            opacity: 1;
+            transform: translateX(0); /* Desliza para a posição visível */
+            pointer-events: auto; /* Permite cliques quando ativo */
+        }
+
+        .nav-links a {
+            margin: 15px 0; /* Mais espaço entre os links */
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px; /* Links maiores para facilitar o toque */
+            width: 80%; /* Largura dos links */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Separador sutil */
+        }
+
+        .nav-links a:last-child {
+            border-bottom: none; /* Remove a borda do último item */
+        }
+
+        .img-logo {
+            padding-top: 80px; /* Ajuste para telas menores */
+        }
+
+        .img-logo img {
+            width: 80%; /* Logo menor no celular */
+            height: auto;
+        }
+
+        .treino-box {
+            width: 90%; /* Caixas ocupam mais largura */
+            font-size: 18px; /* Tamanho de fonte menor */
+            padding: 15px;
+        }
+
+        .treino-box:hover {
+            transform: scale(1.05) translateY(-10px); /* Hover menos dramático no celular */
+            box-shadow: 0 8px 20px rgba(0, 119, 255, 0.5);
+        }
+
+        .planilha img,
+        .frutas img,
+        .alimentacao img {
+            max-width: 95%; /* Garante que as imagens não transbordem */
+        }
+    }
+
+    @media (max-width: 480px) { /* Para telas de celular típicas */
+        .navbar {
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            font-size: 20px; /* Ajusta o tamanho da fonte para telas muito pequenas */
+            margin: 10px 0;
+        }
+
+        .img-logo {
+            padding-top: 60px;
+        }
+
+        .img-logo img {
+            width: 90%; /* Logo ainda menor */
+        }
+
+        .treino-box {
+            width: 95%; /* Maximiza o uso da largura */
+            font-size: 16px;
+            padding: 10px;
+        }
     }
 </style>
 </head>
@@ -194,12 +355,17 @@
 <div class="stars"></div>
 
 <div class="img-logo">
-    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" height="500px" width="500px" alt="Logo Academia">
+    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" alt="Logo Academia">
 </div>
 
 <div class="navbar" id="navbar">
     <div> 🥔 ACADEMIA BÃO DE BATATA 🥔 </div>
-    <div class="nav-links">
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <div class="nav-links" id="navLinks">
         <a href="tela-inicio.html">Início</a>
         <a href="comentarios.html">Comentários</a>
         <a href="https://www.instagram.com/alegria_rp">Contato</a>
@@ -220,7 +386,7 @@
 <br><br><br><br><br><br><br><br>
 
 <div class="planilha">
-    <img src="logo/palnilha.png" width="100%" height="100%" alt="Planilha de Treino">
+    <img src="logo/palnilha.png" alt="Planilha de Treino">
 </div>
 
 <br>
@@ -234,7 +400,7 @@
 <br>
 
 <div class="frutas">
-    <img src="logo/Captura_de_tela_2025-07-16_005511-removebg-preview.png" height="30%" width="30%" alt="Frutas">
+    <img src="logo/Captura_de_tela_2025-07-16_005511-removebg-preview.png" alt="Frutas">
 </div>
 
 <br>
@@ -245,7 +411,7 @@
 <br>
 
 <div class="alimentacao">
-    <img src="logo/alimentação.jpg" height="40%" width="40%" alt="Alimentação">
+    <img src="logo/alimentação.jpg" alt="Alimentação">
 </div>
 
 <div class="cursor" id="cursor"></div>
@@ -258,18 +424,48 @@
         cursor.style.top = `${e.clientY}px`;
     });
 
-    // Animação da navbar ao rolar
+    // Animação da navbar ao rolar (mantida)
     let lastScrollTop = 0;
     const navbar = document.getElementById("navbar");
+    const navLinks = document.getElementById('navLinks'); // Mova esta declaração para fora da função
 
     window.addEventListener("scroll", () => {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        // Se o menu hambúrguer estiver aberto, a navbar não deve esconder
+        if (navLinks.classList.contains('active')) {
+            return;
+        }
+
         if (currentScroll > lastScrollTop) {
             navbar.classList.add("hide");
         } else {
             navbar.classList.remove("hide");
         }
         lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    // Funcionalidade do Menu Hambúrguer
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    // const navLinks = document.getElementById('navLinks'); // Já declarado acima
+
+    hamburgerMenu.addEventListener('click', () => {
+        hamburgerMenu.classList.toggle('open');
+        navLinks.classList.toggle('active');
+        // Controla o scroll do corpo
+        if (navLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden'; // Impede o scroll
+        } else {
+            document.body.style.overflow = ''; // Restaura o scroll
+        }
+    });
+
+    // Fecha o menu ao clicar em um link (opcional, mas boa prática)
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', () => {
+            hamburgerMenu.classList.remove('open');
+            navLinks.classList.remove('active');
+            document.body.style.overflow = ''; // Restaura o scroll
+        });
     });
 </script>
 
