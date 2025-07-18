@@ -12,42 +12,21 @@
             box-sizing: border-box;
         }
 
-        /* Estilos do corpo da página e transição de fundo */
+        /* Estilos do corpo da página - SEMPRE ESCURO */
         body {
-            height: auto; /* A altura será determinada pelo conteúdo */
             min-height: 100vh; /* Garante que o corpo tenha pelo menos a altura da viewport */
-            background-color: #000000; /* Fundo escuro padrão, sem gradiente */
+            display: flex;
+            flex-direction: column;
+            /* Fundo escuro fixo com gradiente radial */
+            background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
             font-family: sans-serif;
             cursor: none; /* Oculta o cursor padrão */
-            color: white; /* Cor do texto padrão */
-            position: relative; /* Necessário para posicionar o ::before */
+            color: white; /* Cor do texto padrão para fundo escuro */
             overflow-x: hidden; /* Evita scroll horizontal */
-            display: flex; /* Permite flex-direction column para rodapé fixo no final */
-            flex-direction: column;
+            position: relative;
         }
 
-        /* Pseudo-elemento para a transição de cor de fundo */
-        body::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0; /* Começa de baixo */
-            width: 100%;
-            height: 0%; /* Começa com altura zero */
-            background-color: #FFDEAD; /* Cor Navajo White */
-            z-index: -1; /* Fica atrás do conteúdo principal */
-            transition: height 2s ease-in-out; /* Animação suave da altura (mais longa) */
-        }
-
-        /* Preenche a tela quando a classe 'light-background' é adicionada ao body */
-        body.light-background::before {
-            height: 100%; /* Preenche a tela toda */
-        }
-
-        /* Altera a cor do texto para ser legível no fundo claro */
-        body.light-background {
-            color: #333;
-        }
+        /* Removido o body::before pois ele era responsável pela animação de troca de cor */
 
         /* Estrelas no fundo */
         .stars {
@@ -57,12 +36,7 @@
             animation: moveStars 100s linear infinite;
             position: fixed;
             z-index: -2; /* Fica atrás de todo o conteúdo */
-        }
-
-        /* Oculta as estrelas quando o background é claro para melhor contraste */
-        body.light-background .stars {
-            opacity: 0;
-            transition: opacity 1s ease-in-out; /* Transição suave para as estrelas sumirem */
+            /* Estrelas sempre visíveis, sem opacidade alterada */
         }
 
         /* Animação das estrelas */
@@ -85,20 +59,20 @@
             z-index: 1000;
         }
 
-        /* Navbar fixa com animações */
+        /* Navbar fixa - SEMPRE ESCURA */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             padding: 15px 30px;
-            background: rgba(0, 0, 30, 0.8); /* Fundo escuro semi-transparente */
+            background: rgba(0, 0, 30, 0.8); /* Fundo escuro semi-transparente fixo */
             color: white;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 20px;
-            transition: top 0.5s ease, background 0.5s ease, color 1s ease-in-out; /* Transição para esconder/mostrar e mudança de cor */
+            transition: top 0.5s ease; /* Apenas transição para esconder/mostrar */
             z-index: 100;
         }
 
@@ -107,23 +81,7 @@
             top: -80px; /* Esconde a navbar para cima */
         }
 
-        /* Ajusta a navbar para o tema claro */
-        body.light-background .navbar {
-            background: rgba(255, 222, 173, 0.9); /* Um tom de #FFDEAD semi-transparente para a navbar */
-            color: #333; /* Cor do texto mais escura para o fundo claro */
-        }
-        body.light-background .navbar a {
-            color: #333;
-        }
-        body.light-background .navbar a:hover {
-            color: #8B4513; /* Um marrom para o hover no tema claro */
-        }
-        body.light-background .hamburger-menu .bar {
-            background-color: #333; /* Cor do hambúrguer para o tema claro */
-        }
-        body.light-background .close-menu-btn .bar {
-            background-color: #333; /* Cor do X para o tema claro */
-        }
+        /* Removido estilos body.light-background .navbar, .navbar a, .hamburger-menu .bar, .close-menu-btn .bar */
 
         /* Menu Hambúrguer (Oculto por padrão no desktop) */
         .hamburger-menu {
@@ -136,7 +94,7 @@
         .hamburger-menu .bar {
             width: 25px;
             height: 3px;
-            background-color: white;
+            background-color: white; /* Cor da barra do hambúrguer branca fixa */
             margin: 4px 0;
             transition: all 0.3s ease-in-out;
         }
@@ -160,7 +118,7 @@
 
         .nav-links a {
             text-decoration: none;
-            color: white;
+            color: white; /* Cor do link branca fixa */
             transition: color 0.3s ease;
         }
         .nav-links a:hover {
@@ -306,7 +264,7 @@
             }
         }
 
-        /* Aplicando as novas animações. Removi o `animation: slowPulse` para que essas novas tomem efeito */
+        /* Aplicando as novas animações. */
         .frutas.animated-slide {
             animation: slideRight 6s ease-in-out infinite;
         }
@@ -382,7 +340,7 @@
         .close-menu-btn .bar {
             width: 100%;
             height: 3px;
-            background-color: white;
+            background-color: white; /* Cor da barra do X branca fixa */
             position: absolute; /* Para sobrepor */
             transition: all 0.3s ease-in-out;
         }
@@ -431,7 +389,6 @@
                 transform: scale(1.05);
             }
         }
-
 
         /* --- Media Queries para Responsividade Móvel --- */
 
@@ -616,7 +573,7 @@
         main { /* O main agora será o conteúdo principal, exceto o rodapé */
             flex: 1; /* Ocupa o espaço restante */
             padding: 60px 0; /* Padding superior/inferior, 0 nas laterais para alinhar com outras seções */
-            background-color: transparent; /* Remove background para que o body::before seja visível */
+            background-color: transparent; /* Permite que o background do body seja visível */
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -688,10 +645,6 @@
 
     <div class="stars"></div>
 
-    <div class="img-logo">
-        <img src="logo/logo academia.png" alt="Logo Academia">
-    </div>
-
     <div class="navbar" id="navbar">
         <div> 🥔 ACADEMIA PÃO DE BATATA 🥔 </div>
         <div class="hamburger-menu" id="hamburgerMenu">
@@ -713,6 +666,10 @@
     <div class="cursor" id="cursor"></div>
 
     <main>
+        <div class="img-logo">
+            <img src="logo/logo academia.png" alt="Logo Academia">
+        </div>
+
         <div class="n1">
             <div class="treino-box"><a href="link-do-triceps.html">Treino de Tríceps</a></div><br>
             <div class="treino-box"><a href="link-do-peito.html">Treino de Peito</a></div><br>
@@ -829,39 +786,10 @@
             });
         });
 
-        // --- Nova funcionalidade: Mudar background ao rolar para a área de planilhas, frutas ou alimentacao ---
-        const sectionsToTriggerLightBackground = [
-            document.querySelector('.planilha-container'),
-            document.querySelector('.frutas'),
-            document.querySelector('.alimentacao-container') /* Usar o contêiner para maior precisão */
-        ].filter(Boolean); // Filtra elementos nulos caso não existam no HTML
+        // Removida a funcionalidade de "mudar background ao rolar"
+        // const sectionsToTriggerLightBackground = [...];
+        // if (sectionsToTriggerLightBackground.length > 0) { ... }
 
-        if (sectionsToTriggerLightBackground.length > 0) {
-            let activeSections = new Set(); // Conjunto para rastrear quais seções estão atualmente visíveis
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        activeSections.add(entry.target); // Adiciona a seção visível ao conjunto
-                    } else {
-                        activeSections.delete(entry.target); // Remove a seção que saiu de vista
-                    }
-                });
-
-                // Se houver qualquer seção visível no conjunto, aplica o fundo claro
-                if (activeSections.size > 0) {
-                    document.body.classList.add('light-background');
-                } else {
-                    // Caso contrário, remove o fundo claro
-                    document.body.classList.remove('light-background');
-                }
-            }, { threshold: 0.1 }); // O fundo muda quando 10% do elemento está visível (ajuste para a sensibilidade)
-
-            // Observa cada uma das seções definidas
-            sectionsToTriggerLightBackground.forEach(section => {
-                observer.observe(section);
-            });
-        }
 
         // --- Funcionalidade: Alternar animação e popup da imagem de alimentação ao clicar ---
         const alimentacaoImage = document.querySelector('.alimentacao'); // Seleciona apenas a classe 'alimentacao'
@@ -872,26 +800,19 @@
 
             alimentacaoImage.addEventListener('click', (event) => {
                 event.preventDefault(); // Previne o comportamento padrão do link, se for um link.
-
                 // Se a imagem já tiver sido clicada para o popup, não faça nada.
                 if (alimentacaoImage.classList.contains('clicked-alimentacao')) {
-                    return;
+                    // Se estiver com popup, remove o popup e volta a animar
+                    alimentacaoImage.classList.remove('clicked-alimentacao');
+                    alimentacaoImage.classList.add('animated-slide');
+                } else {
+                    // Se estiver animando, para a animação e adiciona o popup
+                    alimentacaoImage.classList.remove('animated-slide');
+                    alimentacaoImage.classList.add('clicked-alimentacao');
                 }
-
-                // Remove a animação de slide
-                alimentacaoImage.classList.remove('animated-slide');
-
-                // Adiciona a animação de popup
-                alimentacaoImage.classList.add('clicked-alimentacao');
-
-                // Opcional: Remover a classe 'clicked-alimentacao' após a animação para permitir um clique futuro
-                // ou para redefinir o estado. Depende do comportamento desejado.
-                // Por exemplo, para remover após a animação:
-                alimentacaoImage.addEventListener('animationend', () => {
-                    // alimentacaoImage.classList.remove('clicked-alimentacao'); // Descomente se quiser permitir cliques repetidos
-                }, { once: true }); // Executa o listener apenas uma vez
             });
         }
     </script>
+
 </body>
 </html>
