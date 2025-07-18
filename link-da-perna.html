@@ -397,6 +397,102 @@
             font-size: 14px;
         }
     }
+
+    /* Estilos do rodapé */
+main { /* O main agora será o conteúdo principal, exceto o rodapé */
+    flex: 1; /* Ocupa o espaço restante */
+    padding: 60px 0; /* Padding superior/inferior, 0 nas laterais para alinhar com outras seções */
+    background-color: transparent; /* Remove background para que o body::before seja visível */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Alinha o conteúdo ao topo do main */
+}
+
+footer {
+    background-color: #000;
+    color: #fff;
+    padding: 40px 60px;
+    width: 100%; /* Garante que o rodapé ocupe a largura total */
+    box-sizing: border-box; /* Inclui padding na largura */
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 30px;
+    max-width: 1200px; /* Limita a largura do conteúdo do rodapé */
+    margin: 0 auto; /* Centraliza o conteúdo do rodapé */
+}
+
+.footer-logo {
+    flex: 1;
+    min-width: 200px;
+}
+
+.footer-logo img {
+    width: 40px;
+    vertical-align: middle;
+}
+
+.footer-logo span {
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 10px;
+    vertical-align: middle;
+}
+
+.footer-links {
+    display: flex;
+    flex: 3;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.footer-column {
+    display: flex;
+    flex-direction: column;
+    min-width: 120px;
+}
+
+.footer-column a {
+    color: #ccc;
+    text-decoration: none;
+    margin-bottom: 8px;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.footer-column a:hover {
+    color: #fff;
+}
+
+/* Responsive Footer (from Media Queries section) */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px; /* Reduz o padding */
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 20px;
+        align-items: center;
+    }
+    footer {
+        padding: 20px 30px;
+    }
+}
+
+@media (max-width: 480px) {
+    footer {
+        padding: 15px 20px;
+    }
+}
 </style>
 </head>
 <body>
@@ -470,6 +566,37 @@
 <div class="note-block">
     <p>PS: No treino de Panturrilha, você pode escolher entre os dois exercícios, não é para fazer os dois.</p>
 </div>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/3047/3047923.png" alt="Coffee">
+            <span>Academia</span>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <a href="https://investor.smartfit.com.br/o-grupo/nossa-historia/">Sobre nós</a>
+                <a href="https://www.smartfit.com.br/">Nossas Lojas</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.smartfit.com.br/">Franquia</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.instagram.com/alegria_rp/">Fale conosco</a>
+                <a href="https://www.smartfit.com.br/trabalhe-conosco-vagas?landing_page=true">Trabalhe conosco</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.gofitness.com.br/politica-de-privacidade/">Política de privacidade</a>
+                <a href="https://academiaaquafit.com.br/normas-de-utilizacao-da-academia/">Termos de uso</a>
+                <a href="https://medias.bodytech.company/privacy/Codigo_de_Etica.pdf">Código de Ética</a>
+                <br>
+                <br>
+                <P>Esse site é para uso academico somente para estudos!! </P>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <a href="index.html" class="btn-voltar">Voltar</a>
 

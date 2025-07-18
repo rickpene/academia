@@ -2,8 +2,10 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Espaço com Navbar Animada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espaço com Navbar Animada</title>
 <style>
+    /* Reset básico e box-sizing */
     * {
         margin: 0;
         padding: 0;
@@ -11,13 +13,57 @@
     }
 
     body {
-        height: 300vh; /* Aumenta o conteúdo para testar o scroll */
+        min-height: 100vh; /* Garante que o corpo tenha pelo menos 100% da altura da viewport */
+        display: flex; /* Adiciona flexbox ao body */
+        flex-direction: column; /* Organiza os filhos em coluna */
         background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
         font-family: sans-serif;
         cursor: none;
         color: white; /* Garante que o texto seja visível no fundo escuro */
         overflow-x: hidden; /* Evita scroll horizontal indesejado */
+        position: relative; /* Necessário para o ::before */
     }
+
+    /* Pseudo-elemento para a transição de cor de fundo */
+    body::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0; /* Começa de baixo */
+        width: 100%;
+        height: 0%; /* Começa com altura zero */
+        background-color: #FFDEAD; /* Cor Navajo White */
+        z-index: -1; /* Fica atrás do conteúdo principal */
+        transition: height 2s ease-in-out; /* Animação suave da altura (mais longa) */
+    }
+
+    /* Preenche a tela quando a classe 'light-background' é adicionada ao body */
+    body.light-background::before {
+        height: 100%; /* Preenche a tela toda */
+    }
+
+    /* Altera a cor do texto para ser legível no fundo claro */
+    body.light-background {
+        color: #333;
+    }
+
+    body.light-background .navbar {
+        background: rgba(255, 222, 173, 0.9); /* Um tom de #FFDEAD semi-transparente para a navbar */
+        color: #333; /* Cor do texto mais escura para o fundo claro */
+    }
+    body.light-background .navbar a {
+        color: #333;
+    }
+    body.light-background .navbar a:hover {
+        color: #8B4513; /* Um marrom para o hover no tema claro */
+    }
+    body.light-background .hamburger-menu .bar {
+        background-color: #333; /* Cor do hambúrguer para o tema claro */
+    }
+    body.light-background .close-menu-btn .bar {
+        background-color: #333; /* Cor do X para o tema claro */
+    }
+
 
     /* Estrelas no fundo */
     .stars {
@@ -28,6 +74,13 @@
         position: fixed;
         z-index: -2;
     }
+
+    /* Oculta as estrelas quando o background é claro para melhor contraste */
+    body.light-background .stars {
+        opacity: 0;
+        transition: opacity 1s ease-in-out; /* Transição suave para as estrelas sumirem */
+    }
+
 
     @keyframes moveStars {
         from { background-position: 0 0; }
@@ -61,7 +114,7 @@
         justify-content: space-between;
         align-items: center;
         font-size: 20px;
-        transition: top 0.5s ease;
+        transition: top 0.5s ease, background 0.5s ease, color 1s ease-in-out;
         z-index: 100;
     }
 
@@ -175,6 +228,125 @@
         font-size: 1.1em;
         color: #ffcccc; /* Cor mais clara para o texto da nota */
     }
+
+    /* Animações de entrada e saída contínuas para frutas e alimentação */
+    @keyframes slideRight {
+        0% {
+            transform: translateX(-150%);
+            opacity: 0;
+        }
+        25% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        75% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(150%);
+            opacity: 0;
+        }
+    }
+
+    @keyframes slideLeft {
+        0% {
+            transform: translateX(150%);
+            opacity: 0;
+        }
+        25% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        75% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(-150%);
+            opacity: 0;
+        }
+    }
+
+    .alimentacao.animated-slide {
+        animation: slideLeft 6s ease-in-out infinite;
+    }
+
+    /* Estilo para a imagem de alimentação quando clicada */
+    .alimentacao.clicked-alimentacao {
+        animation: popup 0.5s ease-out forwards; /* Adiciona a animação de popup */
+        z-index: 3000; /* Garante que fique na frente */
+    }
+
+    @keyframes popup {
+        0% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.1);
+            opacity: 0.9;
+        }
+        100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* --- ESTILOS ADICIONAIS PARA CENTRALIZAÇÃO E RESPONSIVIDADE (alimentacao) --- */
+    .alimentacao-container {
+        display: flex;
+        justify-content: center; /* Centraliza horizontalmente o conteúdo */
+        align-items: center; /* Centraliza verticalmente se o contêiner tiver altura */
+        width: 100%; /* Ocupa a largura total */
+        margin: 50px auto; /* Adiciona margens superior/inferior e centraliza o contêiner */
+        overflow: hidden; /* Garante que a animação de slide não crie scrollbar */
+    }
+
+    .alimentacao {
+        text-align: center; /* Centraliza o conteúdo (imagem) dentro dela */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        /* Remover margin: 0 auto; da própria .alimentacao se ela estiver dentro de um flex container com justify-content: center */
+        margin: 0; /* Garante que não haja margem extra aqui */
+    }
+
+    .alimentacao img {
+        display: block; /* Remove o espaço extra abaixo da imagem */
+        max-width: 100%; /* Torna a imagem de alimentação responsiva ao seu contêiner */
+        height: auto; /* Mantém a proporção */
+    }
+
+    .alimentacao:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    /* Container para planilhas - novo */
+    .planilha-section {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px; /* Espaçamento entre as imagens das planilhas */
+        margin-top: 80px;
+        margin-bottom: 80px;
+        padding: 20px;
+    }
+
+    .planilha-item img {
+        max-width: 600px; /* Largura máxima para as imagens de planilha */
+        width: 90%; /* Responsividade para as imagens de planilha */
+        height: auto;
+        border: 3px solid #66bbff; /* Borda para destacar */
+        border-radius: 10px;
+        box-shadow: 0 0 15px rgba(102, 187, 255, 0.4);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .planilha-item img:hover {
+        transform: scale(1.03);
+        box-shadow: 0 0 25px rgba(102, 187, 255, 0.7);
+    }
+
 
     /* ------------------- Media Queries para Responsividade Móvel ------------------- */
 
@@ -302,6 +474,9 @@
             max-width: 90%;
             font-size: 1em;
         }
+        .planilha-item img {
+            width: 95%; /* Ajuste para telas menores */
+        }
     }
 
     @media (max-width: 480px) { /* Para telas de celular típicas */
@@ -340,6 +515,9 @@
         .exercise-block img {
             width: 120px; /* Tamanho ainda menor para gifs em telas muito pequenas */
             height: 120px;
+        }
+        .planilha-item img {
+            width: 98%; /* Ajuste para telas muito pequenas */
         }
     }
 
@@ -397,110 +575,107 @@
             font-size: 14px;
         }
     }
+
     /* Estilos do rodapé */
-main { /* O main agora será o conteúdo principal, exceto o rodapé */
-    flex: 1; /* Ocupa o espaço restante */
-    padding: 60px 0; /* Padding superior/inferior, 0 nas laterais para alinhar com outras seções */
-    background-color: transparent; /* Remove background para que o body::before seja visível */
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start; /* Alinha o conteúdo ao topo do main */
-}
-
-footer {
-    background-color: #000;
-    color: #fff;
-    padding: 40px 60px;
-    width: 100%; /* Garante que o rodapé ocupe a largura total */
-    box-sizing: border-box; /* Inclui padding na largura */
-}
-
-.footer-container {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 30px;
-    max-width: 1200px; /* Limita a largura do conteúdo do rodapé */
-    margin: 0 auto; /* Centraliza o conteúdo do rodapé */
-}
-
-.footer-logo {
-    flex: 1;
-    min-width: 200px;
-}
-
-.footer-logo img {
-    width: 40px;
-    vertical-align: middle;
-}
-
-.footer-logo span {
-    font-size: 24px;
-    font-weight: bold;
-    margin-left: 10px;
-    vertical-align: middle;
-}
-
-.footer-links {
-    display: flex;
-    flex: 3;
-    justify-content: space-around;
-    flex-wrap: wrap;
-}
-
-.footer-column {
-    display: flex;
-    flex-direction: column;
-    min-width: 120px;
-}
-
-.footer-column a {
-    color: #ccc;
-    text-decoration: none;
-    margin-bottom: 8px;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.footer-column a:hover {
-    color: #fff;
-}
-
-/* Responsive Footer (from Media Queries section) */
-@media (max-width: 768px) {
-    .footer-container {
+    main { /* O main agora será o conteúdo principal, exceto o rodapé */
+        flex: 1; /* Ocupa o espaço restante */
+        padding: 60px 0; /* Padding superior/inferior, 0 nas laterais para alinhar com outras seções */
+        background-color: transparent; /* Remove background para que o body::before seja visível */
+        text-align: center;
+        display: flex;
         flex-direction: column;
         align-items: center;
-        text-align: center;
-        padding: 20px; /* Reduz o padding */
+        justify-content: flex-start; /* Alinha o conteúdo ao topo do main */
+    }
+
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 40px 60px;
+        width: 100%; /* Garante que o rodapé ocupe a largura total */
+        box-sizing: border-box; /* Inclui padding na largura */
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 30px;
+        max-width: 1200px; /* Limita a largura do conteúdo do rodapé */
+        margin: 0 auto; /* Centraliza o conteúdo do rodapé */
+    }
+
+    .footer-logo {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .footer-logo img {
+        width: 40px;
+        vertical-align: middle;
+    }
+
+    .footer-logo span {
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
     }
 
     .footer-links {
-        flex-direction: column;
-        gap: 20px;
-        align-items: center;
+        display: flex;
+        flex: 3;
+        justify-content: space-around;
+        flex-wrap: wrap;
     }
-    footer {
-        padding: 20px 30px;
-    }
-}
 
-@media (max-width: 480px) {
-    footer {
-        padding: 15px 20px;
+    .footer-column {
+        display: flex;
+        flex-direction: column;
+        min-width: 120px;
     }
-}
+
+    .footer-column a {
+        color: #ccc;
+        text-decoration: none;
+        margin-bottom: 8px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+        color: #fff;
+    }
+
+    /* Responsive Footer (from Media Queries section) */
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px; /* Reduz o padding */
+        }
+
+        .footer-links {
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        footer {
+            padding: 20px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        footer {
+            padding: 15px 20px;
+        }
+    }
 </style>
 </head>
 <body>
 
 <div class="stars"></div>
-
-<div class="img-logo">
-    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" alt="Logo Academia">
-</div>
 
 <div class="navbar" id="navbar">
     <div> 🥔 ACADEMIA PÃO DE BATATA 🥔 </div>
@@ -522,30 +697,19 @@ footer {
 
 <div class="cursor" id="cursor"></div>
 
-<div class="exercise-block">
-    <p>REMADA CURVADA COM BARRA </p>
-    <img src="treino/rosca-inversa-barra-w.gif" alt="Rosca Inversa na Barra W">
-</div>
+<main>
+    <div class="img-logo">
+        <img src="logo/logo academia.png" alt="Logo Academia">
+    </div>
 
-<div class="exercise-block">
-    <p>REMADA MÁQUINA</p>
-    <img src="treino/extensao-de-punho-com-barra.gif" alt="Extensão de Punho com Barra">
-</div>
+    <div class="alimentacao-container">
+        <div class="alimentacao animated-slide">
+            <img src="logo/alimentação.jpg" alt="Alimentação">
+        </div>
+    </div>
 
-<div class="exercise-block">
-    <p>PUXADA</p>
-    <img src="treino/rusca-punho-com-barra.gif" alt="Rosca de Punho com Barra">
-</div>
+    </main>
 
-<div class="exercise-block">
-    <p>TREINO DE ANTEBRAÇO</p>
-    <img src="treino/roscaww.gif" alt="Rosca Inversa com Barra">
-</div>
-
-<div class="note-block">
-    <p>PS: Não fazer o último exercício com o movimento pelas costas, mas sim pela frente do corpo.</p>
-</div>
-    
 <footer>
     <div class="footer-container">
         <div class="footer-logo">
@@ -571,11 +735,12 @@ footer {
                 <a href="https://medias.bodytech.company/privacy/Codigo_de_Etica.pdf">Código de Ética</a>
                 <br>
                 <br>
-                <P>Esse site é para uso academia somente para estudos!! </P>
+                <P>Esse site é para uso academico somente para estudos!! </P>
             </div>
         </div>
     </div>
 </footer>
+
 <a href="index.html" class="btn-voltar">Voltar</a>
 
 <script>
@@ -589,7 +754,7 @@ footer {
     // Animação da navbar ao rolar (esconde/mostra)
     let lastScrollTop = 0;
     const navbar = document.getElementById("navbar");
-    const navLinks = document.getElementById('navLinks'); // Mova esta declaração para fora da função
+    const navLinks = document.getElementById('navLinks');
 
     window.addEventListener("scroll", () => {
         let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
@@ -628,6 +793,59 @@ footer {
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', toggleMenu);
     });
+
+    // --- Funcionalidade: Alternar animação e popup da imagem de alimentação ao clicar ---
+    const alimentacaoImage = document.querySelector('.alimentacao'); // Seleciona apenas a classe 'alimentacao'
+
+    if (alimentacaoImage) {
+        // Inicializa com a animação de slide
+        alimentacaoImage.classList.add('animated-slide');
+
+        alimentacaoImage.addEventListener('click', () => {
+            if (alimentacaoImage.classList.contains('animated-slide')) {
+                // Se estiver animando, para a animação e adiciona o popup
+                alimentacaoImage.classList.remove('animated-slide');
+                alimentacaoImage.classList.add('clicked-alimentacao');
+            } else {
+                // Se estiver com popup, remove o popup e volta a animar
+                alimentacaoImage.classList.remove('clicked-alimentacao');
+                alimentacaoImage.classList.add('animated-slide');
+            }
+        });
+    }
+
+    // --- Nova funcionalidade: Mudar background ao rolar para a área de planilhas ou alimentacao ---
+    const sectionsToTriggerLightBackground = [
+        document.querySelector('.planilha-section'), /* Novo seletor */
+        document.querySelector('.alimentacao-container') /* Usar o contêiner para maior precisão */
+    ].filter(Boolean); // Filtra elementos nulos caso não existam no HTML
+
+    if (sectionsToTriggerLightBackground.length > 0) {
+        let activeSections = new Set(); // Conjunto para rastrear quais seções estão atualmente visíveis
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    activeSections.add(entry.target); // Adiciona a seção visível ao conjunto
+                } else {
+                    activeSections.delete(entry.target); // Remove a seção que saiu de vista
+                }
+            });
+
+            // Se houver qualquer seção visível no conjunto, aplica o fundo claro
+            if (activeSections.size > 0) {
+                document.body.classList.add('light-background');
+            } else {
+                // Caso contrário, remove o fundo claro
+                document.body.classList.remove('light-background');
+            }
+        }, { threshold: 0.1 }); // O fundo muda quando 10% do elemento está visível (ajuste para a sensibilidade)
+
+        // Observa cada uma das seções definidas
+        sectionsToTriggerLightBackground.forEach(section => {
+            observer.observe(section);
+        });
+    }
 </script>
 
 </body>

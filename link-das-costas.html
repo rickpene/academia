@@ -17,6 +17,7 @@
         cursor: none;
         color: white; /* Garante que o texto seja visível no fundo escuro */
         overflow-x: hidden; /* Evita scroll horizontal indesejado */
+        /* Removed flex properties from body */
     }
 
     /* Estrelas no fundo */
@@ -380,15 +381,98 @@
             font-size: 14px;
         }
     }
+    /* Estilos do rodapé */
+    /* Removed main styles as main tag is removed */
+
+    footer {
+        background-color: #000;
+        color: #fff;
+        padding: 40px 60px;
+        width: 100%; /* Garante que o rodapé ocupe a largura total */
+        box-sizing: border-box; /* Inclui padding na largura */
+        /* Removed margin-top: auto */
+    }
+
+    .footer-container {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 30px;
+        max-width: 1200px; /* Limita a largura do conteúdo do rodapé */
+        margin: 0 auto; /* Centraliza o conteúdo do rodapé */
+    }
+
+    .footer-logo {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .footer-logo img {
+        width: 40px;
+        vertical-align: middle;
+    }
+
+    .footer-logo span {
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+
+    .footer-links {
+        display: flex;
+        flex: 3;
+        justify-content: space-around;
+        flex-wrap: wrap;
+    }
+
+    .footer-column {
+        display: flex;
+        flex-direction: column;
+        min-width: 120px;
+    }
+
+    .footer-column a {
+        color: #ccc;
+        text-decoration: none;
+        margin-bottom: 8px;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+    .footer-column a:hover {
+        color: #fff;
+    }
+
+    /* Responsive Footer (from Media Queries section) */
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 20px; /* Reduz o padding */
+        }
+
+        .footer-links {
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        footer {
+            padding: 20px 30px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        footer {
+            padding: 15px 20px;
+        }
+    }
 </style>
 </head>
 <body>
 
 <div class="stars"></div>
-
-<div class="img-logo">
-    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" alt="Logo Academia">
-</div>
 
 <div class="navbar" id="navbar">
     <div> 🥔 ACADEMIA PÃO DE BATATA 🥔 </div>
@@ -410,22 +494,57 @@
 
 <div class="cursor" id="cursor"></div>
 
+<div class="img-logo">
+    <img src="logo/logo academia.png" alt="Logo Academia">
+</div>
+
 <div class="exercise-block">
-    <p>TREINO DE COSTA</p>
+    <p>REMADA CURVADA COM BARRA</p>
     <img src="treino/costas-remada-curvada-.gif" alt="Remada Curvada">
 </div>
 
 <div class="exercise-block">
-    <p>TREINO DE COSTA</p>
+    <p>REMADA MÁQUINA</p>
     <img src="treino/remada-articulada-na-maquina-pequena-pronada.gif" alt="Remada Articulada na Máquina Pronada">
 </div>
 
 <div class="exercise-block">
-    <p>TREINO DE COSTA</p>
+    <p>PUXADA</p>
     <img src="treino/Puxada-Alta-Aberta.gif" alt="Puxada Alta Aberta">
 </div>
 
 <a href="index.html" class="btn-voltar">Voltar</a>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-logo">
+            <img src="https://cdn-icons-png.flaticon.com/512/3047/3047923.png" alt="Coffee">
+            <span>Academia</span>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-column">
+                <a href="https://investor.smartfit.com.br/o-grupo/nossa-historia/">Sobre nós</a>
+                <a href="https://www.smartfit.com.br/">Nossas Lojas</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.smartfit.com.br/">Franquia</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.instagram.com/alegria_rp/">Fale conosco</a>
+                <a href="https://www.smartfit.com.br/trabalhe-conosco-vagas?landing_page=true">Trabalhe conosco</a>
+            </div>
+            <div class="footer-column">
+                <a href="https://www.gofitness.com.br/politica-de-privacidade/">Política de privacidade</a>
+                <a href="https://academiaaquafit.com.br/normas-de-utilizacao-da-academia/">Termos de uso</a>
+                <a href="https://medias.bodytech.company/privacy/Codigo_de_Etica.pdf">Código de Ética</a>
+                <br>
+                <br>
+                <P>Esse site é para uso academia somente para estudos!! </P>
+            </div>
+        </div>
+    </div>
+</footer>
 
 <script>
     // Cursor animado (será escondido em telas menores via CSS)
