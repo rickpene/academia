@@ -2,21 +2,48 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Espaço com Navbar Animada</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espaço com Navbar Animada</title>
 <style>
+    /* Reset básico e box-sizing */
     * {
         margin: 0;
         padding: 0;
         box-sizing: border-box;
     }
 
+    /* Estilos do corpo da página e transição de fundo */
     body {
-        height: 300vh; /* Aumenta o conteúdo para testar o scroll */
-        background: radial-gradient(ellipse at bottom, #000015 0%, #000000 100%);
+        height: 300vh; /* Altura para permitir rolagem */
+        background-color: #000000; /* Fundo escuro padrão, sem gradiente */
         font-family: sans-serif;
-        cursor: none;
-        color: white; /* Garante que o texto seja visível no fundo escuro */
-        /* Removido: overflow-x: hidden; - Isso estava causando problemas, e o media query já resolve o cursor */
+        cursor: none; /* Oculta o cursor padrão */
+        color: white; /* Cor do texto padrão */
+        position: relative; /* Necessário para posicionar o ::before */
+        overflow-x: hidden; /* Evita scroll horizontal */
+    }
+
+    /* Pseudo-elemento para a transição de cor de fundo */
+    body::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0; /* Começa de baixo */
+        width: 100%;
+        height: 0%; /* Começa com altura zero */
+        background-color: #FFDEAD; /* Cor Navajo White */
+        z-index: -1; /* Fica atrás do conteúdo principal */
+        transition: height 2s ease-in-out; /* Animação suave da altura (mais longa) */
+    }
+
+    /* Preenche a tela quando a classe 'light-background' é adicionada ao body */
+    body.light-background::before {
+        height: 100%; /* Preenche a tela toda */
+    }
+
+    /* Altera a cor do texto para ser legível no fundo claro */
+    body.light-background {
+        color: #333;
     }
 
     /* Estrelas no fundo */
@@ -26,9 +53,16 @@
         background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-space/master/stars.png') repeat;
         animation: moveStars 100s linear infinite;
         position: fixed;
-        z-index: -2;
+        z-index: -2; /* Fica atrás de todo o conteúdo */
     }
 
+    /* Oculta as estrelas quando o background é claro para melhor contraste */
+    body.light-background .stars {
+        opacity: 0;
+        transition: opacity 1s ease-in-out; /* Transição suave para as estrelas sumirem */
+    }
+
+    /* Animação das estrelas */
     @keyframes moveStars {
         from { background-position: 0 0; }
         to { background-position: -10000px 10000px; }
@@ -42,9 +76,9 @@
         border-radius: 50%;
         background: white;
         box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6);
-        pointer-events: none;
-        transform: translate(-50%, -50%);
-        transition: transform 0.1s ease;
+        pointer-events: none; /* Ignora eventos de mouse */
+        transform: translate(-50%, -50%); /* Centraliza o cursor */
+        transition: transform 0.1s ease; /* Transição suave para o movimento */
         z-index: 1000;
     }
 
@@ -55,18 +89,37 @@
         left: 0;
         width: 100%;
         padding: 15px 30px;
-        background: rgba(0, 0, 30, 0.8);
+        background: rgba(0, 0, 30, 0.8); /* Fundo escuro semi-transparente */
         color: white;
         display: flex;
         justify-content: space-between;
         align-items: center;
         font-size: 20px;
-        transition: top 0.5s ease;
+        transition: top 0.5s ease, background 0.5s ease, color 1s ease-in-out; /* Transição para esconder/mostrar e mudança de cor */
         z-index: 100;
     }
 
+    /* Esconde a navbar ao rolar para baixo */
     .navbar.hide {
-        top: -80px;
+        top: -80px; /* Esconde a navbar para cima */
+    }
+
+    /* Ajusta a navbar para o tema claro */
+    body.light-background .navbar {
+        background: rgba(255, 222, 173, 0.9); /* Um tom de #FFDEAD semi-transparente para a navbar */
+        color: #333; /* Cor do texto mais escura para o fundo claro */
+    }
+    body.light-background .navbar a {
+        color: #333;
+    }
+    body.light-background .navbar a:hover {
+        color: #8B4513; /* Um marrom para o hover no tema claro */
+    }
+    body.light-background .hamburger-menu .bar {
+        background-color: #333; /* Cor do hambúrguer para o tema claro */
+    }
+    body.light-background .close-menu-btn .bar {
+        background-color: #333; /* Cor do X para o tema claro */
     }
 
     /* Menu Hambúrguer (Oculto por padrão no desktop) */
@@ -89,11 +142,9 @@
     .hamburger-menu.open .bar:nth-child(1) {
         transform: translateY(7px) rotate(45deg);
     }
-
     .hamburger-menu.open .bar:nth-child(2) {
         opacity: 0;
     }
-
     .hamburger-menu.open .bar:nth-child(3) {
         transform: translateY(-7px) rotate(-45deg);
     }
@@ -109,7 +160,6 @@
         color: white;
         transition: color 0.3s ease;
     }
-
     .nav-links a:hover {
         color: #aaa;
     }
@@ -139,6 +189,10 @@
         width: 500px; /* Largura padrão para telas maiores */
     }
 
+    /* Caixas de treino */
+    .n1 {
+        padding-top: 50px; /* Espaçamento para o conteúdo abaixo da navbar e logo */
+    }
     .treino-box {
         text-align: center;
         width: 500px;
@@ -161,7 +215,7 @@
     .treino-box:hover {
         transform: scale(1.08) translateY(-15px);
         box-shadow: 0 12px 25px rgba(0, 119, 255, 0.5);
-        z-index: 2000;
+        z-index: 2000; /* Traz para frente no hover */
     }
 
     .treino-box a {
@@ -170,42 +224,43 @@
         display: block; /* Garante que o link preencha a caixa inteira */
     }
 
-    /* Planilha com pulsação */
-    .planilha {
-        animation: pulsar 3s ease-in-out infinite;
+    /* Estilos para as planilhas (planilha-1 e planilha-2) */
+    .planilha-container {
+        display: flex;
+        flex-direction: column; /* Para empilhar as imagens verticalmente */
+        align-items: center; /* Centraliza as imagens horizontalmente */
+        gap: 20px; /* Espaço entre as imagens das planilhas */
+        margin-top: 50px; /* Adiciona um espaço para separar do conteúdo acima */
+    }
+
+    .planilha-item {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 20px;
-        margin-top: 50px; /* Adiciona um espaço para separar */
+        width: fit-content; /* Ajusta a largura ao conteúdo */
+        position: relative; /* Necessário para z-index */
+        z-index: 1; /* Z-index padrão */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, z-index 0.3s ease-in-out;
     }
 
-    .planilha img {
-        max-width: 90%; /* Torna a planilha responsiva */
-        height: auto;
+    .planilha-item img {
+        max-width: 500px; /* Tamanho maior para as imagens da planilha */
+        height: auto; /* Mantém a proporção */
+        display: block;
+        transition: transform 0.3s ease-in-out;
     }
 
-    @keyframes pulsar {
-        0%, 100% {
-            transform: scale(1);
-        }
-        50% {
-            transform: scale(1.05);
-        }
+    .planilha-item:hover img {
+        transform: translateY(-10px); /* Animação de movimento ao passar o mouse */
+    }
+
+    .planilha-item.active {
+        z-index: 2000; /* Fica na frente de outros elementos ao ser clicado */
+        transform: scale(1.1); /* Um leve aumento ao ser clicado */
+        box-shadow: 0 0 30px rgba(0, 255, 255, 0.7); /* Sombra para destaque */
     }
 
     /* Animação de pulsação lenta para 'frutas' */
-    .frutas {
-        text-align: center;
-        animation: slowPulse 4s ease-in-out infinite;
-        margin-top: 50px; /* Adiciona um espaço para separar */
-    }
-
-    .frutas img {
-        max-width: 60%; /* Torna frutas responsiva */
-        height: auto;
-    }
-
     @keyframes slowPulse {
         0%, 100% {
             transform: scale(1);
@@ -213,6 +268,16 @@
         50% {
             transform: scale(1.03);
         }
+    }
+    .frutas {
+        text-align: center;
+        /* animation: slowPulse 4s ease-in-out infinite; */ /* This was commented out in previous version */
+        margin-top: 50px; /* Adiciona um espaço para separar */
+    }
+
+    .frutas img {
+        max-width: 60%; /* Torna frutas responsiva */
+        height: auto;
     }
 
     /* Centraliza a imagem "alimentação" e adiciona animação de hover */
@@ -265,8 +330,56 @@
         transform: rotate(-45deg);
     }
 
+    /* Animações de entrada e saída contínuas para frutas e alimentação (do segundo código) */
+    @keyframes slideRight {
+        0% {
+            transform: translateX(-150%);
+            opacity: 0;
+        }
+        25% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        75% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(150%);
+            opacity: 0;
+        }
+    }
 
-    /* ------------------- Media Queries para Responsividade Móvel ------------------- */
+    @keyframes slideLeft {
+        0% {
+            transform: translateX(150%);
+            opacity: 0;
+        }
+        25% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        75% {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        100% {
+            transform: translateX(-150%);
+            opacity: 0;
+        }
+    }
+
+    /* Aplicando as novas animações. Removi o `animation: slowPulse` para que essas novas tomem efeito */
+    .frutas.animated-slide {
+        animation: slideRight 6s ease-in-out infinite;
+    }
+
+    .alimentacao.animated-slide {
+        animation: slideLeft 6s ease-in-out infinite;
+    }
+
+
+    /* --- Media Queries para Responsividade Móvel --- */
 
     @media (max-width: 768px) { /* Para tablets e dispositivos menores */
         body {
@@ -357,7 +470,7 @@
             box-shadow: 0 8px 20px rgba(0, 119, 255, 0.5);
         }
 
-        .planilha img {
+        .planilha-item img {
             max-width: 95%; /* Garante que as imagens não transbordem */
         }
         .frutas img {
@@ -398,7 +511,7 @@
             padding: 10px;
         }
 
-        .planilha img {
+        .planilha-item img {
             max-width: 98%;
         }
         .frutas img {
@@ -446,17 +559,15 @@
     <div class="treino-box"><a href="link-da-perna.html">Treino de Perna</a></div><br>
 </div>
 
-<div class="planilha">
-    <img src="logo/palnilha.png" alt="Planilha de Treino">
-</div>
-
-<div class="frutas">
+<div class="frutas animated-slide">
     <img src="logo/Captura_de_tela_2025-07-16_005511-removebg-preview.png" alt="Frutas">
 </div>
 
-<div class="alimentacao">
+<div class="alimentacao animated-slide">
     <img src="logo/alimentação.jpg" alt="Alimentação">
 </div>
+
+<div class="treino-box" style="margin-top: 50px;"><a href="link-da-rotina.html">Rotina de Treino</a></div><br>
 
 <div class="cursor" id="cursor"></div>
 
@@ -510,6 +621,56 @@
     navLinks.querySelectorAll('a').forEach(link => {
         link.addEventListener('click', toggleMenu); // Usa a função toggleMenu para fechar
     });
+
+    // Funcionalidade de clique para as planilhas (trazer para frente)
+    const planilhaItems = document.querySelectorAll('.planilha-item');
+
+    planilhaItems.forEach(item => {
+        item.addEventListener('click', () => {
+            // Remove a classe 'active' de todas as outras planilhas
+            planilhaItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            // Alterna a classe 'active' na planilha clicada
+            item.classList.toggle('active');
+        });
+    });
+
+    // --- Nova funcionalidade: Mudar background ao rolar para a área de planilhas, frutas ou alimentacao ---
+    const sectionsToTriggerLightBackground = [
+        document.querySelector('.planilha-container'),
+        document.querySelector('.frutas'),
+        document.querySelector('.alimentacao')
+    ].filter(Boolean); // Filtra elementos nulos caso não existam no HTML
+
+    if (sectionsToTriggerLightBackground.length > 0) {
+        let activeSections = new Set(); // Conjunto para rastrear quais seções estão atualmente visíveis
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    activeSections.add(entry.target); // Adiciona a seção visível ao conjunto
+                } else {
+                    activeSections.delete(entry.target); // Remove a seção que saiu de vista
+                }
+            });
+
+            // Se houver qualquer seção visível no conjunto, aplica o fundo claro
+            if (activeSections.size > 0) {
+                document.body.classList.add('light-background');
+            } else {
+                // Caso contrário, remove o fundo claro
+                document.body.classList.remove('light-background');
+            }
+        }, { threshold: 0.1 }); // O fundo muda quando 10% do elemento está visível (ajuste para a sensibilidade)
+
+        // Observa cada uma das seções definidas
+        sectionsToTriggerLightBackground.forEach(section => {
+            observer.observe(section);
+        });
+    }
 </script>
 
 </body>

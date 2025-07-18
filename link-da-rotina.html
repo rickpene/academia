@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Espaço com Navbar Animada</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Reset básico e box-sizing */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* Estilos do corpo da página - Fundo escuro padrão SEM ALTERAÇÃO */
+    body {
+        height: 300vh; /* Altura para permitir rolagem */
+        background-color: #000000; /* Fundo escuro padrão */
+        font-family: 'Montserrat', sans-serif; /* Usando Montserrat globalmente */
+        cursor: none; /* Oculta o cursor padrão */
+        color: white; /* Cor do texto padrão */
+        position: relative; /* Necessário para posicionar elementos */
+        overflow-x: hidden; /* Evita scroll horizontal */
+    }
+
+    /* REMOVIDO: Pseudo-elemento para a transição de cor de fundo */
+    /* REMOVIDO: body::before e body.light-background::before */
+
+    /* REMOVIDO: Altera a cor do texto para ser legível no fundo claro */
+    /* REMOVIDO: body.light-background */
+
+    /* Estrelas no fundo */
+    .stars {
+        width: 100%;
+        height: 100%;
+        background: transparent url('https://raw.githubusercontent.com/JulianLaval/canvas-space/master/stars.png') repeat;
+        animation: moveStars 100s linear infinite;
+        position: fixed;
+        z-index: -2; /* Fica atrás de todo o conteúdo */
+    }
+
+    /* REMOVIDO: Oculta as estrelas quando o background é claro */
+    /* REMOVIDO: body.light-background .stars */
+
+    /* Animação das estrelas */
+    @keyframes moveStars {
+        from { background-position: 0 0; }
+        to { background-position: -10000px 10000px; }
+    }
+
+    /* Cursor customizado - Oculto em dispositivos de toque por media query */
+    .cursor {
+        position: fixed;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: white;
+        box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.6);
+        pointer-events: none; /* Ignora eventos de mouse */
+        transform: translate(-50%, -50%); /* Centraliza o cursor */
+        transition: transform 0.1s ease; /* Transição suave para o movimento */
+        z-index: 1000;
+    }
+
+    /* Navbar fixa com animações */
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        padding: 15px 30px;
+        background: rgba(0, 0, 30, 0.8); /* Fundo escuro semi-transparente */
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 20px;
+        transition: top 0.5s ease; /* Mantém apenas a transição de esconder/mostrar */
+        z-index: 100;
+    }
+
+    /* Esconde a navbar ao rolar para baixo */
+    .navbar.hide {
+        top: -80px; /* Esconde a navbar para cima */
+    }
+
+    /* REMOVIDO: Ajustes da navbar para o tema claro */
+    /* REMOVIDO: body.light-background .navbar */
+    /* REMOVIDO: body.light-background .navbar a */
+    /* REMOVIDO: body.light-background .navbar a:hover */
+    /* REMOVIDO: body.light-background .hamburger-menu .bar */
+    /* REMOVIDO: body.light-background .close-menu-btn .bar */
+
+    /* Menu Hambúrguer (Oculto por padrão no desktop) */
+    .hamburger-menu {
+        display: none; /* Oculta o ícone do hambúrguer no desktop */
+        flex-direction: column;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    .hamburger-menu .bar {
+        width: 25px;
+        height: 3px;
+        background-color: white; /* Cor da barra branca, consistente */
+        margin: 4px 0;
+        transition: all 0.3s ease-in-out;
+    }
+
+    /* Animação do ícone do hambúrguer para X */
+    .hamburger-menu.open .bar:nth-child(1) {
+        transform: translateY(7px) rotate(45deg);
+    }
+    .hamburger-menu.open .bar:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger-menu.open .bar:nth-child(3) {
+        transform: translateY(-7px) rotate(-45deg);
+    }
+
+    /* Links de navegação (desktop) */
+    .nav-links {
+        display: flex; /* Exibe os links lado a lado por padrão no desktop */
+        gap: 20px; /* Espaçamento entre os links */
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: white;
+        transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+        color: #aaa;
+    }
+
+    /* Animação de entrada da imagem principal (logo) */
+    @keyframes fadeSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .img-logo {
+        text-align: center;
+        animation: fadeSlideIn 1.5s ease forwards; /* Aplica a animação aqui */
+        opacity: 0; /* Inicia invisível para a animação */
+        padding-top: 100px; /* Ajuste para evitar sobreposição com a navbar */
+        margin-bottom: 50px; /* Add space below the logo */
+    }
+
+    .img-logo img {
+        max-width: 100%; /* Torna o logo responsivo */
+        height: auto; /* Mantém a proporção */
+        width: 500px; /* Largura padrão para telas maiores */
+    }
+
+    /* Botão de Fechar/Voltar dentro do menu */
+    .close-menu-btn {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+        z-index: 1000; /* Garante que esteja acima dos links */
+        display: none; /* Oculto por padrão, visível apenas no menu mobile ativo */
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .close-menu-btn .bar {
+        width: 100%;
+        height: 3px;
+        background-color: white; /* Cor da barra branca, consistente */
+        position: absolute; /* Para sobrepor */
+        transition: all 0.3s ease-in-out;
+    }
+
+    .close-menu-btn .bar:nth-child(1) {
+        transform: rotate(45deg);
+    }
+
+    .close-menu-btn .bar:nth-child(2) {
+        transform: rotate(-45deg);
+    }
+
+    /* --- Styles for the New Beautiful Workout Plan Table --- */
+
+    :root {
+        --color-segunda: #a30000; /* Dark Red */
+        --color-terca: #cc3300;   /* Orange Red */
+        --color-quarta: #e68a00;  /* Dark Orange */
+        --color-quinta: #339933;  /* Green */
+        --color-sexta: #3366cc;   /* Blue */
+        --color-sabado: #663399;  /* Purple */
+        --color-domingo: #800080; /* Violet */
+
+        --text-light: #f0f0f0;
+        --text-dark: #333;
+        --bg-light: #ffffff;
+        --border-color: #e0e0e0;
+        --shadow-light: rgba(0, 0, 0, 0.1);
+        --shadow-hover: rgba(0, 0, 0, 0.2);
+    }
+
+    .workout-plan-container {
+        background-color: var(--bg-light);
+        border-radius: 15px;
+        box-shadow: 0 10px 30px var(--shadow-light);
+        overflow: hidden; /* Ensures rounded corners for children */
+        width: 95%; /* Adjust width for larger display */
+        max-width: 1200px; /* Maximum width for desktop */
+        margin: 50px auto; /* Center the container with top/bottom margin */
+        color: var(--text-dark); /* Ensure text is dark on light background */
+    }
+
+    .workout-plan-container h1 {
+        text-align: center;
+        padding: 30px 20px;
+        margin: 0;
+        background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); /* A more dynamic header */
+        color: var(--text-light);
+        font-size: 2.5em;
+        letter-spacing: 1px;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .workout-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 1.1em; /* Larger base font size */
+        margin-top: 20px;
+    }
+
+    .workout-table thead th {
+        padding: 20px 10px; /* More padding */
+        font-weight: 700; /* Bolder headers */
+        color: var(--text-light);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        text-align: center;
+        white-space: nowrap; /* Prevent day names from wrapping */
+    }
+
+    /* Header specific colors */
+    .workout-table th.segunda { background-color: var(--color-segunda); }
+    .workout-table th.terca { background-color: var(--color-terca); }
+    .workout-table th.quarta { background-color: var(--color-quarta); }
+    .workout-table th.quinta { background-color: var(--color-quinta); }
+    .workout-table th.sexta { background-color: var(--color-sexta); }
+    .workout-table th.sabado { background-color: var(--color-sabado); }
+    .workout-table th.domingo { background-color: var(--color-domingo); }
+
+    .workout-table tbody td {
+        padding: 25px 15px; /* Even more padding for content cells */
+        border: 1px solid var(--border-color);
+        text-align: center;
+        vertical-align: middle;
+        font-size: 1.05em; /* Slightly larger text in cells */
+        transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+        position: relative; /* For the pseudo-element glow */
+    }
+
+    .workout-table tbody tr:nth-child(even) {
+        background-color: #f9f9f9; /* Subtle zebra striping */
+    }
+
+    .workout-table tbody td:hover {
+        background-color: #eaf6ff; /* Light blue on hover */
+        transform: translateY(-3px); /* Slight lift effect */
+        box-shadow: 0 8px 15px var(--shadow-hover);
+        z-index: 10; /* Bring to front on hover */
+    }
+
+    .workout-table tbody td:active {
+        transform: translateY(0); /* Press down effect */
+        box-shadow: 0 2px 5px var(--shadow-light);
+    }
+
+    /* Styling for empty cells */
+    .workout-table tbody td.empty {
+        color: #ccc;
+        font-style: italic;
+        background-color: #fcfcfc;
+    }
+
+    /* Responsive adjustments for the new table */
+    @media (max-width: 900px) {
+        .workout-plan-container {
+            width: 98%;
+            border-radius: 10px;
+        }
+        .workout-plan-container h1 {
+            font-size: 2em;
+            padding: 25px 15px;
+        }
+        .workout-table thead th {
+            font-size: 0.9em;
+            padding: 15px 5px;
+        }
+        .workout-table tbody td {
+            font-size: 0.9em;
+            padding: 20px 8px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .workout-plan-container h1 {
+            font-size: 1.5em;
+            padding: 20px 10px;
+        }
+        /* Make table stackable on very small screens (more complex, consider using flexbox for rows or transforming to cards) */
+        .workout-table, .workout-table thead, .workout-table tbody, .workout-table th, .workout-table td, .workout-table tr {
+            display: block; /* Make all elements block-level */
+        }
+
+        .workout-table thead tr {
+            position: absolute;
+            top: -9999px; /* Hide table headers (but keep them for accessibility) */
+            left: -9999px;
+        }
+
+        .workout-table tr {
+            border: 1px solid var(--border-color);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .workout-table td {
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+            padding-left: 50%; /* Space for the "label" before the actual content */
+            text-align: left; /* Align text to left */
+        }
+
+        .workout-table td:last-child {
+            border-bottom: 0;
+        }
+
+        /* Add labels to cells using data attributes */
+        .workout-table td:before {
+            position: absolute;
+            top: 0;
+            left: 6px;
+            width: 45%; /* Space for the label */
+            padding-right: 10px;
+            white-space: nowrap;
+            content: attr(data-label); /* Use data-label attribute for content */
+            font-weight: 700;
+            color: var(--text-dark);
+        }
+
+        /* Day specific labels for stacked view (needs to be more granular if each cell needs its own day label) */
+        /* For this general mobile stacking, we won't put day labels on every cell, as the whole row becomes the "day" */
+    }
+
+
+    /* --- Media Queries for existing elements --- */
+
+    @media (max-width: 768px) { /* For tablets and smaller devices */
+        body {
+            font-size: 16px;
+        }
+
+        /* Hide the custom cursor on smaller screens */
+        .cursor {
+            display: none;
+        }
+
+        .navbar {
+            padding: 10px 15px;
+            font-size: 16px;
+            flex-wrap: wrap; /* Allows items to wrap if needed */
+        }
+
+        .navbar.hide {
+            top: -80px; /* Adjust hide value for fixed navbar height */
+        }
+
+        /* Show hamburger menu icon */
+        .hamburger-menu {
+            display: flex; /* Show hamburger icon */
+            order: 2; /* Place hamburger to the right of the title */
+        }
+
+        /* Nav-links to fill the entire screen */
+        .nav-links {
+            display: flex; /* Keep flex for vertical centering */
+            flex-direction: column;
+            justify-content: center; /* Center items vertically */
+            align-items: center; /* Center items horizontally */
+            width: 100%;
+            height: 100%; /* Adjusted to 100% */
+            position: fixed; /* Fixed to screen */
+            top: 0;
+            left: 0;
+            background: rgba(0, 0, 30, 0.98); /* Almost opaque background for open menu */
+            z-index: 999; /* Ensure menu is on top */
+            opacity: 0;
+            transform: translateX(100%); /* Start off-screen to the right */
+            pointer-events: none; /* Prevent clicks when hidden */
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out; /* Longer transition */
+        }
+
+        .nav-links.active {
+            opacity: 1;
+            transform: translateX(0); /* Slide to visible position */
+            pointer-events: auto; /* Allow clicks when active */
+        }
+
+        .nav-links a {
+            margin: 15px 0; /* More space between links */
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 24px; /* Larger links for easier touch */
+            width: 80%; /* Link width */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+
+        .nav-links a:last-child {
+            border-bottom: none; /* Remove border from last item */
+        }
+
+        /* Show close button in active menu */
+        .nav-links.active .close-menu-btn {
+            display: flex;
+        }
+
+        .img-logo {
+            padding-top: 80px; /* Adjust for smaller screens */
+        }
+
+        .img-logo img {
+            width: 80%; /* Smaller logo on mobile */
+            height: auto;
+        }
+
+        /* Styles for the "Voltar" button */
+        .btn-voltar {
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 20px;
+            font-size: 16px;
+        }
+    }
+
+    @media (max-width: 480px) { /* For typical mobile phone screens */
+        .navbar {
+            padding: 8px 10px;
+            font-size: 14px;
+        }
+
+        .nav-links a {
+            font-size: 20px; /* Adjust font size for very small screens */
+            margin: 10px 0;
+        }
+
+        .close-menu-btn {
+            top: 15px; /* Adjust position for very small screens */
+            right: 15px;
+        }
+
+        .img-logo {
+            padding-top: 60px;
+        }
+
+        .img-logo img {
+            width: 90%; /* Even smaller logo */
+        }
+
+        /* Styles for the "Voltar" button */
+        .btn-voltar {
+            bottom: 15px;
+            right: 15px;
+            padding: 10px 18px;
+            font-size: 14px;
+        }
+    }
+
+    /* Styles for the "Voltar" button */
+    .btn-voltar {
+        position: fixed; /* Fixa o botão na tela */
+        bottom: 30px; /* Distância do fundo */
+        right: 30px; /* Distância da direita */
+        padding: 15px 25px; /* Tamanho do botão */
+        background: linear-gradient(45deg, #556a81, #7f8c9b); /* Gradiente azul para o botão */
+        color: white;
+        border: none;
+        border-radius: 50px; /* Botão arredondado */
+        font-size: 18px;
+        font-weight: bold;
+        cursor: pointer;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Sombra para profundidade */
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        z-index: 100; /* Garante que fique acima de outros elementos */
+        animation: pulsar 1.5s infinite ease-in-out; /* Animação de pulsação */
+        text-decoration: none; /* Remove sublinhado do link */
+        display: inline-block; /* Permite aplicar padding e transform */
+    }
+
+    .btn-voltar:hover {
+        transform: scale(1.05); /* Leve aumento ao passar o mouse */
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        animation: none; /* Para a pulsação ao passar o mouse */
+    }
+
+    /* Keyframes para a animação de pulsação */
+    @keyframes pulsar {
+        0%, 100% {
+            transform: scale(1);
+        }
+        50% {
+            transform: scale(1.05);
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<div class="img-logo">
+    <img src="logo/25851892-fisiculturista-masculino-figura-icone-academia-logotipo-modelo-atletico-homem-placa-branco-silhueta-em-preto-fundo-ilustracao-vetor__1_-removebg-preview.png" alt="Logo Academia">
+</div>
+
+<div class="navbar" id="navbar">
+    <div> 🥔 ACADEMIA PÃO DE BATATA 🥔 </div>
+    <div class="hamburger-menu" id="hamburgerMenu">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <div class="nav-links" id="navLinks">
+        <div class="close-menu-btn" id="closeMenuBtn">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+        <a href="index.html">Início</a>
+        <a href="comentarios.html">Comentários</a>
+        <a href="https://www.instagram.com/alegria_rp">Contato</a>
+    </div>
+</div>
+
+<div class="workout-plan-container">
+    <h1>PLANILHA DE TREINO SEMANAL</h1>
+    <table class="workout-table">
+        <thead>
+            <tr>
+                <th class="segunda">Segunda</th>
+                <th class="terca">Terça</th>
+                <th class="quarta">Quarta</th>
+                <th class="quinta">Quinta</th>
+                <th class="sexta">Sexta</th>
+                <th class="sabado">Sábado</th>
+                <th class="domingo">Domingo</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td data-label="Segunda-feira">Treino de Tríceps</td>
+                <td data-label="Terça-feira">Treino de Bíceps</td>
+                <td data-label="Quarta-feira">Ombro</td>
+                <td data-label="Quinta-feira">Treino de Tríceps</td>
+                <td data-label="Sexta-feira" class="empty">----------</td>
+                <td data-label="Sábado">Treino de Perna</td>
+                <td data-label="Domingo" class="empty">----------</td>
+            </tr>
+            <tr>
+                <td data-label="Segunda-feira">Treino de Peito</td>
+                <td data-label="Terça-feira">Treino de Costas</td>
+                <td data-label="Quarta-feira" class="empty">----------</td>
+                <td data-label="Quinta-feira">Treino de Bíceps</td>
+                <td data-label="Sexta-feira" class="empty">----------</td>
+                <td data-label="Sábado" class="empty">----------</td>
+                <td data-label="Domingo" class="empty">----------</td>
+            </tr>
+            <tr>
+                <td data-label="Segunda-feira" class="empty">----------</td>
+                <td data-label="Terça-feira" class="empty">----------</td>
+                <td data-label="Quarta-feira" class="empty">----------</td>
+                <td data-label="Quinta-feira">Treino de Antebraço</td>
+                <td data-label="Sexta-feira" class="empty">----------</td>
+                <td data-label="Sábado" class="empty">----------</td>
+                <td data-label="Domingo" class="empty">----------</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="cursor" id="cursor"></div>
+
+<a href="index.html" class="btn-voltar">Voltar</a>
+
+<script>
+    // Cursor animado
+    const cursor = document.getElementById('cursor');
+    document.addEventListener('mousemove', e => {
+        cursor.style.left = `${e.clientX}px`;
+        cursor.style.top = `${e.clientY}px`;
+    });
+
+    // Animação da navbar ao rolar (esconde/mostra)
+    let lastScrollTop = 0;
+    const navbar = document.getElementById("navbar");
+    const navLinks = document.getElementById('navLinks');
+
+    window.addEventListener("scroll", () => {
+        let currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+        // Se o menu hambúrguer estiver aberto, a navbar não deve esconder
+        if (navLinks.classList.contains('active')) {
+            return;
+        }
+
+        if (currentScroll > lastScrollTop) {
+            navbar.classList.add("hide");
+        } else {
+            navbar.classList.remove("hide");
+        }
+        lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
+    });
+
+    // Funcionalidade do Menu Hambúrguer (abre/fecha)
+    const hamburgerMenu = document.getElementById('hamburgerMenu');
+    const closeMenuBtn = document.getElementById('closeMenuBtn'); // Pega o botão de fechar
+
+    function toggleMenu() {
+        hamburgerMenu.classList.toggle('open');
+        navLinks.classList.toggle('active');
+        // Controla o scroll do corpo
+        if (navLinks.classList.contains('active')) {
+            document.body.style.overflow = 'hidden'; // Impede o scroll
+        } else {
+            document.body.style.overflow = ''; // Restaura o scroll
+        }
+    }
+
+    hamburgerMenu.addEventListener('click', toggleMenu);
+    closeMenuBtn.addEventListener('click', toggleMenu); // Adiciona listener para o botão de fechar
+
+    // Fecha o menu ao clicar em um link
+    navLinks.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', toggleMenu); // Usa a função toggleMenu para fechar
+    });
+
+    // REMOVIDO: Background change when scrolling to the end of the page
+    // O script a seguir foi removido para manter o fundo escuro constante:
+    /*
+    window.addEventListener('scroll', () => {
+        const scrollPosition = window.scrollY;
+        const documentHeight = document.documentElement.scrollHeight;
+        const windowHeight = window.innerHeight;
+        const scrollBottom = documentHeight - (scrollPosition + windowHeight);
+        const threshold = 200;
+        if (scrollBottom <= threshold) {
+            document.body.classList.add('light-background');
+        } else {
+            document.body.classList.remove('light-background');
+        }
+    });
+    */
+
+    // Removed the previous IntersectionObserver for specific sections
+</script>
+
+</body>
+</html>
